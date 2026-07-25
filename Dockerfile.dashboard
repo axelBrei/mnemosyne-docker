@@ -1,0 +1,17 @@
+FROM python:3.12-slim
+
+WORKDIR /app
+
+# Clonar el repo del dashboard
+RUN apt-get update && apt-get install -y git curl && rm -rf /var/lib/apt/lists/*
+
+RUN git clone https://github.com/wysie/mnemosyne-dashboard.git .
+
+EXPOSE 8765
+
+# Variables de entorno para que apunte al SQLite de Mnemosyne
+ENV MNEMOSYNE_DASHBOARD_HOST=0.0.0.0
+ENV MNEMOSYNE_DASHBOARD_PORT=8765
+ENV MNEMOSYNE_DASHBOARD_DB=/data/mnemosyne.db
+
+CMD ["python", "server.py", "--host", "0.0.0.0", "--port", "8765"]
